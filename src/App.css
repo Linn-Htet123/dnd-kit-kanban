@@ -1,0 +1,15 @@
+body {
+  @apply bg-slate-200;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar:horizontal {
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-400;
+}
