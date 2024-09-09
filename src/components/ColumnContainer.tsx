@@ -1,16 +1,16 @@
-import { arrayMove, SortableContext, useSortable } from "@dnd-kit/sortable";
+import {  SortableContext, useSortable } from "@dnd-kit/sortable";
 import TrashIcon from "../icons/TrashIcon";
 import { Column, ID, Task } from "../type";
 import { CSS } from "@dnd-kit/utilities";
 import { useMemo, useState } from "react";
 import TaskCard from "./Task";
-import {
-  DndContext,
-  DragEndEvent,
-  DragOverlay,
-  DragStartEvent,
-} from "@dnd-kit/core";
-import { createPortal } from "react-dom";
+// import {
+//   DndContext,
+//   DragEndEvent,
+//   DragOverlay,
+//   DragStartEvent,
+// } from "@dnd-kit/core";
+// import { createPortal } from "react-dom";
 
 interface Props {
   column: Column;
@@ -29,7 +29,7 @@ const ColumnContainer = ({
   createTask,
   tasks,
   deleteTask,
-  setTask,
+  // setTask,
 }: Props) => {
   const [isEdit, setIsEdit] = useState(false);
   const {
@@ -52,28 +52,28 @@ const ColumnContainer = ({
     transform: CSS.Transform.toString(transform),
   };
   const tasksID = useMemo(() => tasks.map((task) => task.id), [tasks]);
-  const [currentDragTask, setCurrentDragTask] = useState<Task | null>(null);
-  const handleDragStart = (event: DragStartEvent) => {
-    if (event.active.data.current?.type === "Task") {
-      setCurrentDragTask(event.active.data.current?.task);
-    }
-  };
+  // const [currentDragTask, setCurrentDragTask] = useState<Task | null>(null);
+  // const handleDragStart = (event: DragStartEvent) => {
+  //   if (event.active.data.current?.type === "Task") {
+  //     setCurrentDragTask(event.active.data.current?.task);
+  //   }
+  // };
 
-  const handleDragOver = (event: DragEndEvent) => {
-    const { active, over } = event;
-    if (!over) return;
-    const activeTaskID = active.id;
-    const overTaskID = over.id;
-    if (activeTaskID === overTaskID) return;
+  // const handleDragOver = (event: DragEndEvent) => {
+  //   const { active, over } = event;
+  //   if (!over) return;
+  //   const activeTaskID = active.id;
+  //   const overTaskID = over.id;
+  //   if (activeTaskID === overTaskID) return;
 
-    setTask((prev) => {
-      const activeIDx = prev.findIndex((task) => task.id === activeTaskID);
-      const overIDx = prev.findIndex((task) => task.id === overTaskID);
-      prev[activeIDx].columnID = prev[overIDx].columnID;
+  //   setTask((prev) => {
+  //     const activeIDx = prev.findIndex((task) => task.id === activeTaskID);
+  //     const overIDx = prev.findIndex((task) => task.id === overTaskID);
+  //     prev[activeIDx].columnID = prev[overIDx].columnID;
 
-      return arrayMove(prev, activeIDx, overIDx);
-    });
-  };
+  //     return arrayMove(prev, activeIDx, overIDx);
+  //   });
+  // };
   if (isDragging) {
     return (
       <div
@@ -127,7 +127,7 @@ const ColumnContainer = ({
       </div>
 
       {/* Content will grow to take up the remaining space */}
-      <DndContext onDragStart={handleDragStart} onDragOver={handleDragOver}>
+      {/* <DndContext onDragStart={handleDragStart} onDragOver={handleDragOver}> */}
         <div className="flex-grow py-4 px-2">
           <SortableContext items={tasksID}>
             {tasks.map((task) => {
@@ -138,15 +138,15 @@ const ColumnContainer = ({
             })}
           </SortableContext>
         </div>
-        {createPortal(
+        {/* {createPortal(
           <DragOverlay>
             {currentDragTask && (
               <TaskCard task={currentDragTask} deleteTask={deleteTask} />
             )}
           </DragOverlay>,
           document.body
-        )}
-      </DndContext>
+        )} */}
+      {/* </DndContext> */}
       {/* Footer sticks to the bottom */}
       <div
         className="px-2 py-3 bg-slate-100 font-medium m-2 text-black text-center rounded-lg cursor-pointer"
