@@ -19,6 +19,7 @@ const TaskCard = ({
     transform,
     transition,
     isDragging,
+    isOver,
   } = useSortable({
     id: task.id,
     data: {

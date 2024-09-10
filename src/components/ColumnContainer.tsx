@@ -1,4 +1,4 @@
-import {  SortableContext, useSortable } from "@dnd-kit/sortable";
+import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import TrashIcon from "../icons/TrashIcon";
 import { Column, ID, Task } from "../type";
 import { CSS } from "@dnd-kit/utilities";
@@ -29,8 +29,8 @@ const ColumnContainer = ({
   createTask,
   tasks,
   deleteTask,
-  // setTask,
-}: Props) => {
+}: // setTask,
+Props) => {
   const [isEdit, setIsEdit] = useState(false);
   const {
     setNodeRef,
@@ -39,6 +39,7 @@ const ColumnContainer = ({
     transform,
     transition,
     isDragging,
+    isOver,
   } = useSortable({
     id: column.id,
     data: {
@@ -96,7 +97,7 @@ const ColumnContainer = ({
         onClick={() => setIsEdit(true)}
       >
         <div className="flex justify-center items-center p-2 w-5 h-5 text-sm bg-slate-900 rounded-full">
-          0
+          {tasks.length}
         </div>
         <div className="flex justify-between p-4 flex-grow font-medium cursor-grab">
           {isEdit && (
@@ -128,17 +129,17 @@ const ColumnContainer = ({
 
       {/* Content will grow to take up the remaining space */}
       {/* <DndContext onDragStart={handleDragStart} onDragOver={handleDragOver}> */}
-        <div className="flex-grow py-4 px-2">
-          <SortableContext items={tasksID}>
-            {tasks.map((task) => {
-              if (task.columnID !== column.id) return null;
-              return (
-                <TaskCard task={task} key={task.id} deleteTask={deleteTask} />
-              );
-            })}
-          </SortableContext>
-        </div>
-        {/* {createPortal(
+      <div className="flex-grow py-4 px-2">
+        <SortableContext items={tasksID}>
+          {tasks.map((task) => {
+            if (task.columnID !== column.id) return null;
+            return (
+              <TaskCard task={task} key={task.id} deleteTask={deleteTask} />
+            );
+          })}
+        </SortableContext>
+      </div>
+      {/* {createPortal(
           <DragOverlay>
             {currentDragTask && (
               <TaskCard task={currentDragTask} deleteTask={deleteTask} />

@@ -47,20 +47,38 @@ const KanBanBoard = () => {
   const handleDragEnd = (event: DragEndEvent) => {
     setCurrentDragTask(null);
     setCurrentDraggedCol(null);
-  
+
     const { active, over } = event;
     if (!over) return;
-    const activeColumnID = active.id;
-    const overColumnID = over.id;
-    if (activeColumnID === overColumnID) return;
 
-    setColumns((prev) => {
-      const activeColumnIdx = prev.findIndex(
-        (col) => col.id === activeColumnID
+    const activeID = active.id;
+    const overID = over.id;
+
+    // Check if the active item is a column or a task
+    const isActiveAColumn = active.data.current?.type === "Column";
+    const isActiveATask = active.data.current?.type === "Task";
+    const isOverAColumn = over.data.current?.type === "Column";
+
+    // Column Sorting Logic
+    if (isActiveAColumn && isOverAColumn) {
+      if (activeID === overID) return;
+
+      // Only run the sorting logic for columns
+      setColumns((prev) => {
+        const activeColumnIdx = prev.findIndex((col) => col.id === activeID);
+        const overColumnIdx = prev.findIndex((col) => col.id === overID);
+        return arrayMove(prev, activeColumnIdx, overColumnIdx);
+      });
+    }
+
+    // Task Moving Logic
+    if (isActiveATask && isOverAColumn) {
+      setTasks((prev) =>
+        prev.map((task) =>
+          task.id === activeID ? { ...task, columnID: overID } : task
+        )
       );
-      const overColumnIdx = prev.findIndex((col) => col.id === overColumnID);
-      return arrayMove(prev, activeColumnIdx, overColumnIdx);
-    });
+    }
   };
 
   const handleDragOver = (event: DragOverEvent) => {
@@ -167,8 +185,10 @@ const KanBanBoard = () => {
                 setTask={setTasks}
               />
             )}
-             {currentDragTask && (
-              <TaskCard task={currentDragTask} deleteTask={deleteTask} />
+            {currentDragTask && (
+              <div className="text-white">
+                <TaskCard task={currentDragTask} deleteTask={deleteTask} />
+              </div>
             )}
           </DragOverlay>,
           document.body
